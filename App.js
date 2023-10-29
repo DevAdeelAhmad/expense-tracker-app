@@ -1,20 +1,68 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-export default function App() {
+import ManageExpenseScreen from "./screens/ManageExpensesScreen";
+import RecentExpensesScreen from "./screens/RecentExpensesScreen";
+import AllExpensesScreen from "./screens/AllExpensesScreen";
+
+import { GlobalStyles } from "./constants/styles";
+
+const Stack = createNativeStackNavigator();
+const Bottom = createBottomTabNavigator();
+
+function ExpensesOverview() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Bottom.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+        headerTintColor: "white",
+        tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+        tabBarActiveTintColor: GlobalStyles.colors.accent500,
+      }}
+    >
+      <Bottom.Screen
+        name="RecentExpenses"
+        component={RecentExpensesScreen}
+        options={{
+          title: "Recent Expenses",
+          tabBarLabel: "Recent",
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="hourglass" size={size} color={color} />
+          ),
+        }}
+      />
+      <Bottom.Screen
+        name="AllExpenses"
+        component={AllExpensesScreen}
+        options={{
+          title: "All Expenses",
+          tabBarLabel: "All",
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="calendar" size={size} color={color} />
+          ),
+        }}
+      />
+    </Bottom.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <>
+      <StatusBar style="light" />
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="ExpensesOverview">
+          <Stack.Screen
+            name="ExpensesOverview"
+            component={ExpensesOverview}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="ManageExpense" component={ManageExpenseScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
+  );
+}
