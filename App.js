@@ -8,6 +8,7 @@ import ManageExpenseScreen from "./screens/ManageExpensesScreen";
 import RecentExpensesScreen from "./screens/RecentExpensesScreen";
 import AllExpensesScreen from "./screens/AllExpensesScreen";
 
+import IconButton from "./components/ui/IconButton";
 import { GlobalStyles } from "./constants/styles";
 
 const Stack = createNativeStackNavigator();
@@ -16,12 +17,22 @@ const Bottom = createBottomTabNavigator();
 function ExpensesOverview() {
   return (
     <Bottom.Navigator
-      screenOptions={{
+      screenOptions={({ navigation }) => ({
         headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         headerTintColor: "white",
         tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         tabBarActiveTintColor: GlobalStyles.colors.accent500,
-      }}
+        headerRight: ({ tintColor }) => (
+          <IconButton
+            icon="add"
+            size={24}
+            color={tintColor}
+            onPress={() => {
+              navigation.navigate("ManageExpense");
+            }}
+          />
+        ),
+      })}
     >
       <Bottom.Screen
         name="RecentExpenses"
@@ -54,13 +65,25 @@ export default function App() {
     <>
       <StatusBar style="light" />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="ExpensesOverview">
+        <Stack.Navigator
+          initialRouteName="ExpensesOverview"
+          screenOptions={{
+            headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+            headerTintColor: "white",
+          }}
+        >
           <Stack.Screen
             name="ExpensesOverview"
             component={ExpensesOverview}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="ManageExpense" component={ManageExpenseScreen} />
+          <Stack.Screen
+            name="ManageExpense"
+            component={ManageExpenseScreen}
+            options={{
+              presentation: "modal",
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
