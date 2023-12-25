@@ -1,58 +1,57 @@
 import { Children, createContext, useReducer } from "react";
 
-
 const DUMMY_EXPENSES = [
   {
     id: "e1",
-    description: "Ciggerate",
+    description: "Food",
     amount: 27.5,
     date: new Date("2023-11-19"),
   },
   {
     id: "e2",
-    description: "Lighter",
+    description: "Speakers",
     amount: 40,
     date: new Date("2023-12-20"),
   },
   {
     id: "e3",
-    description: "GoldLeaf",
+    description: "Books",
     amount: 30.5,
     date: new Date("2023-12-21"),
   },
   {
     id: "e4",
-    description: "Food",
+    description: "Snacks",
     amount: 250.51,
     date: new Date("2023-12-22"),
   },
   {
     id: "e5",
-    description: "Ciggerate",
+    description: "Pen",
     amount: 27.5,
     date: new Date("2023-12-19"),
   },
   {
     id: "e6",
-    description: "Lighter",
+    description: "Pencil",
     amount: 40,
     date: new Date("2022-12-20"),
   },
   {
     id: "e7",
-    description: "GoldLeaf",
+    description: "Laptop Charger",
     amount: 30.5,
     date: new Date("2022-12-21"),
   },
   {
     id: "e8",
-    description: "Food",
+    description: "Internet Fee",
     amount: 250.51,
     date: new Date("2021-12-22"),
   },
   {
     id: "e9",
-    description: "Food",
+    description: "Hostel Fee",
     amount: 250.51,
     date: new Date("2021-12-22"),
   },
@@ -60,9 +59,9 @@ const DUMMY_EXPENSES = [
 
 export const ExpensesContext = createContext({
   expenses: [],
-  addExpense: ({ description, amount, date }) => { },
-  deleteExpense: (id) => { },
-  updateExpense: (id, { description, amount, date }) => { },
+  addExpense: ({ description, amount, date }) => {},
+  deleteExpense: (id) => {},
+  updateExpense: (id, { description, amount, date }) => {},
 });
 
 function expensesReducer(state, action) {
@@ -71,13 +70,15 @@ function expensesReducer(state, action) {
       const id = Date.now().toString() + Math.random().toString();
       return [{ ...action.payload }, ...state];
     case "Update":
-      const updatableExpenseIndex = state.findIndex((expense) => expense.id === action.payload.id)
-      const updatableExpense = state[updatableExpenseIndex]
-      const updatedItem = { ...updatableExpense, ...action.payload.data }
-      const updatedExpenses = [...state]
-      updatedExpenses[updatableExpenseIndex] = updatedItem
+      const updatableExpenseIndex = state.findIndex(
+        (expense) => expense.id === action.payload.id
+      );
+      const updatableExpense = state[updatableExpenseIndex];
+      const updatedItem = { ...updatableExpense, ...action.payload.data };
+      const updatedExpenses = [...state];
+      updatedExpenses[updatableExpenseIndex] = updatedItem;
     case "Delete":
-      return state.filter((expense) => expense.id !== action.payload)
+      return state.filter((expense) => expense.id !== action.payload);
     default:
       return state;
   }
@@ -101,9 +102,13 @@ function ExpensesContextProvider({ children }) {
     addExpense: addExpense,
     updateExpense: updateExpense,
     deleteExpense: deleteExpense,
-  }
+  };
 
-  return <ExpensesContext.Provider value={value}>{children}</ExpensesContext.Provider>;
+  return (
+    <ExpensesContext.Provider value={value}>
+      {children}
+    </ExpensesContext.Provider>
+  );
 }
 
 export default ExpensesContextProvider;
